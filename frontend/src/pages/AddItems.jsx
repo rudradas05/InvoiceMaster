@@ -14,8 +14,13 @@ const AddItems = () => {
 
   const [showAddCategory, setShowAddCategory] = useState(false);
 
-  const { backendurl, token, categories, getCategories } =
-    useContext(AppContext);
+  const {
+    backendurl,
+    token,
+    categories,
+    getCategories,
+    addCategory: contextAddCategory,
+  } = useContext(AppContext);
   const [newCategory, setNewCategory] = useState("");
   const [addingCategory, setAddingCategory] = useState(false);
 
@@ -108,10 +113,8 @@ const AddItems = () => {
         toast.success("Category added");
         setNewCategory("");
         setAddingCategory(false);
-        // refresh categories from context
-        if (typeof window !== "undefined") {
-          window.dispatchEvent(new Event("refreshCategories"));
-        }
+        setShowAddCategory(false);
+        getCategories();
       } else {
         toast.error(data.message);
       }

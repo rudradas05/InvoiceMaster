@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -10,37 +10,73 @@ const AppContextProvider = (props) => {
     import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
   const [token, setToken] = useState(
-    localStorage.getItem("token") ? localStorage.getItem("token") : false
+    localStorage.getItem("token") ? localStorage.getItem("token") : false,
   );
   const [isLoggedin, setIsLoggedin] = useState(!!localStorage.getItem("token"));
   const [userData, setUserData] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  const [items, setItems] = useState("");
+  const [items, setItems] = useState([]);
   const [bills, setBills] = useState([]);
   const [categories, setCategories] = useState([]);
 
+  // Ref to avoid stale closure in interceptor
+  const tokenRef = useRef(token);
+  useEffect(() => {
+    tokenRef.current = token;
+  }, [token]);
+
+  // Axios interceptor for auto-logout on 401
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (
+          error.response &&
+          error.response.status === 401 &&
+          tokenRef.current
+        ) {
+          // Token expired or invalid — auto logout
+          setToken(false);
+          setIsLoggedin(false);
+          setUserData(false);
+          setItems([]);
+          setBills([]);
+          setCategories([]);
+          localStorage.removeItem("token");
+          toast.error("Session expired. Please login again.");
+        }
+        return Promise.reject(error);
+      },
+    );
+
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, []);
+
   // Category management
-  const getCategories = async () => {
+  const getCategories = useCallback(async () => {
     try {
       const { data } = await axios.get(backendurl + "/api/category/all", {
         headers: { token },
       });
       if (data.success) {
         setCategories(data.categories);
-      } else {
-        toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      // 401 handled by interceptor
+      if (error.response?.status !== 401) {
+        toast.error(error.message);
+      }
     }
-  };
+  }, [token, backendurl]);
 
   const addCategory = async (name) => {
     try {
       const { data } = await axios.post(
         backendurl + "/api/category/add",
         { name },
-        { headers: { token } }
+        { headers: { token } },
       );
       if (data.success) {
         toast.success("Category added");
@@ -49,7 +85,7 @@ const AppContextProvider = (props) => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      if (error.response?.status !== 401) toast.error(error.message);
     }
   };
 
@@ -58,7 +94,7 @@ const AppContextProvider = (props) => {
       const { data } = await axios.post(
         backendurl + "/api/category/delete",
         { categoryId },
-        { headers: { token } }
+        { headers: { token } },
       );
       if (data.success) {
         toast.success("Category deleted");
@@ -67,26 +103,22 @@ const AppContextProvider = (props) => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      if (error.response?.status !== 401) toast.error(error.message);
     }
   };
 
-  const loadUserData = async () => {
+  const loadUserData = useCallback(async () => {
     try {
       const { data } = await axios.get(backendurl + "/api/user/get-user-data", {
-        headers: {
-          token,
-        },
+        headers: { token },
       });
       if (data.success) {
         setUserData(data.userData);
-      } else {
-        toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      if (error.response?.status !== 401) toast.error(error.message);
     }
-  };
+  }, [token, backendurl]);
 
   const verification_status_user = async () => {
     if (userData && userData.IsAccountVerified === true) {
@@ -96,65 +128,60 @@ const AppContextProvider = (props) => {
     }
   };
 
-  const getAllItems = async () => {
+  const getAllItems = useCallback(async () => {
     try {
       const { data } = await axios.get(backendurl + "/api/user/all-items", {
-        headers: {
-          token,
-        },
+        headers: { token },
       });
       if (data.success) {
-        setItems(data.items);
-      } else {
-        toast.error(data.message);
+        setItems(data.items || []);
       }
     } catch (error) {
-      toast.error(error.message);
+      if (error.response?.status !== 401) toast.error(error.message);
     }
-  };
+  }, [token, backendurl]);
 
-  const getAllBills = async () => {
+  const getAllBills = useCallback(async () => {
     try {
       const { data } = await axios.get(backendurl + "/api/user/all-bill", {
-        headers: {
-          token,
-        },
+        headers: { token },
       });
       if (data.success) {
-        setBills(data.bills);
-      } else {
-        toast.error(data.message);
+        setBills(data.bills || []);
       }
     } catch (error) {
-      toast.error(error.message);
+      if (error.response?.status !== 401) toast.error(error.message);
     }
-  };
+  }, [token, backendurl]);
 
-  const downloadBillPDF = async (billId) => {
-    try {
-      const response = await axios.get(
-        `${backendurl}/api/user/bills/${billId}/pdf`,
-        {
-          responseType: "blob",
-          headers: {
-            token,
+  const downloadBillPDF = useCallback(
+    async (billId) => {
+      try {
+        const response = await axios.get(
+          `${backendurl}/api/user/bills/${billId}/pdf`,
+          {
+            responseType: "blob",
+            headers: { token },
           },
-        }
-      );
+        );
 
-      if (response.data instanceof Blob) {
-        const fileURL = URL.createObjectURL(response.data);
-        const link = document.createElement("a");
-        link.href = fileURL;
-        link.download = `bill_${billId}.pdf`;
-        link.click();
-      } else {
-        throw new Error("PDF data is not valid.");
+        if (response.data instanceof Blob) {
+          const fileURL = URL.createObjectURL(response.data);
+          const link = document.createElement("a");
+          link.href = fileURL;
+          link.download = `bill_${billId}.pdf`;
+          link.click();
+        } else {
+          throw new Error("PDF data is not valid.");
+        }
+      } catch (error) {
+        if (error.response?.status !== 401) {
+          toast.error("Error downloading PDF. Please try again.");
+        }
       }
-    } catch (error) {
-      toast.error("Error downloading PDF. Please try again.");
-    }
-  };
+    },
+    [token, backendurl],
+  );
 
   useEffect(() => {
     if (token) {
@@ -163,7 +190,7 @@ const AppContextProvider = (props) => {
       getAllBills();
       getCategories();
     }
-  }, [token]);
+  }, [token, loadUserData, getAllItems, getAllBills, getCategories]);
 
   useEffect(() => {
     if (token) {
@@ -174,6 +201,16 @@ const AppContextProvider = (props) => {
       setIsLoggedin(false);
     }
   }, [token]);
+
+  const logout = useCallback(() => {
+    setToken(false);
+    setIsLoggedin(false);
+    setUserData(false);
+    setItems([]);
+    setBills([]);
+    setCategories([]);
+    localStorage.removeItem("token");
+  }, []);
 
   const value = {
     token,
@@ -196,6 +233,7 @@ const AppContextProvider = (props) => {
     getCategories,
     addCategory,
     deleteCategory,
+    logout,
   };
 
   return (

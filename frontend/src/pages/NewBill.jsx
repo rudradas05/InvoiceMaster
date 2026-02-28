@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AppContext } from "../context/AppContext";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import axios from "axios";
 import { FiPlus, FiTrash2, FiChevronDown } from "react-icons/fi";
 
@@ -18,7 +18,6 @@ const NewBill = () => {
     downloadBillPDF,
   } = useContext(AppContext);
 
-  
   const [customerName, setCustomerName] = useState("");
   const [customerAddress, setCustomerAddress] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
@@ -70,7 +69,6 @@ const NewBill = () => {
     setShowCustomerResults(false);
   };
 
-
   const [billItems, setBillItems] = useState([
     {
       name: "",
@@ -82,18 +80,15 @@ const NewBill = () => {
     },
   ]);
 
-  
   useEffect(() => {
     setDate(new Date().toISOString().split("T")[0]);
   }, []);
 
-  
   const total = billItems.reduce(
     (sum, item) => sum + Number(item.amount || 0),
     0,
   );
 
-  
   const filteredItems = (query) => {
     if (!query) return [];
     return items.filter((item) =>
@@ -101,7 +96,6 @@ const NewBill = () => {
     );
   };
 
- 
   const handleAddItem = () => {
     setBillItems([
       ...billItems,
@@ -126,7 +120,6 @@ const NewBill = () => {
 
     updated[index][name] = name === "quantity" ? Number(value) : value;
 
-    
     if (name === "name") {
       updated[index].searchQuery = value;
 
@@ -147,7 +140,6 @@ const NewBill = () => {
       }
     }
 
-    
     if (name === "quantity" || name === "rate") {
       updated[index].amount =
         Number(updated[index].quantity) * Number(updated[index].rate || 0);
@@ -156,7 +148,6 @@ const NewBill = () => {
     setBillItems(updated);
   };
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -198,7 +189,6 @@ const NewBill = () => {
         <h1 className="text-2xl font-semibold text-white mb-6">New Bill</h1>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-     
           <div className="bg-[#0f1424] border border-white/10 rounded-xl p-6">
             <p className="text-white font-semibold">{userData?.companyName}</p>
             <p className="text-gray-400 text-sm">Prop. {userData?.name}</p>
@@ -208,7 +198,6 @@ const NewBill = () => {
             </p>
           </div>
 
-         
           <div className="bg-[#0f1424] border border-white/10 rounded-xl p-6 grid md:grid-cols-2 gap-6">
             <div className="relative">
               <input
@@ -249,14 +238,12 @@ const NewBill = () => {
             <input
               value={customerPhone}
               onChange={(e) => setCustomerPhone(e.target.value)}
-            
               placeholder="Customer Phone"
               className="bg-[#0b0f1a] border border-white/10 px-4 py-3 rounded-lg text-white"
             />
             <input
               value={customerEmail}
               onChange={(e) => setCustomerEmail(e.target.value)}
-            
               placeholder="Customer Email"
               className="bg-[#0b0f1a] border border-white/10 px-4 py-3 rounded-lg text-white"
             />
@@ -270,7 +257,6 @@ const NewBill = () => {
             </div>
           </div>
 
-  
           <div className="rounded-xl border border-white/10 bg-[#0f1424] p-6">
             <div className="flex justify-between mb-4">
               <h2 className="text-sm font-medium text-gray-300 uppercase tracking-wider">
@@ -279,105 +265,106 @@ const NewBill = () => {
               <button
                 type="button"
                 onClick={handleAddItem}
-                className="flex items-center gap-2 bg-cyan-500 px-4 py-2 rounded-lg text-black font-semibold hover:bg-cyan-400"
+                className="flex items-center gap-2 bg-cyan-500 px-4 py-2 rounded-lg text-black font-semibold hover:bg-cyan-400 transition"
               >
                 <FiPlus /> Add Item
               </button>
             </div>
 
-            <table className="w-full text-sm">
-              <thead className="text-gray-400">
-                <tr>
-                  <th className="text-left">Item</th>
-                  <th className="text-right">Qty</th>
-                  <th className="text-right">Rate</th>
-                  <th className="text-right">Amount</th>
-                  <th />
-                </tr>
-              </thead>
-
-              <tbody>
-                {billItems.map((item, index) => (
-                  <tr key={index} className="border-t border-white/5">
-                    {/* ITEM SEARCH */}
-                    <td className="relative py-3">
-                      <input
-                        name="name"
-                        value={item.name}
-                        onChange={(e) => handleInputChange(index, e)}
-                        placeholder="Search item"
-                        className="w-full bg-[#0b0f1a] border border-white/10 px-3 py-2 rounded-md text-white"
-                      />
-
-                      {item.searchQuery &&
-                        filteredItems(item.searchQuery).length > 0 && (
-                          <div className="absolute z-20 w-full mt-1 bg-[#0f1424] border border-white/10 rounded-md shadow-lg">
-                            {filteredItems(item.searchQuery).map((it) => (
-                              <div
-                                key={it._id}
-                                onClick={() => {
-                                  const rate =
-                                    it.subCategory === "dozen"
-                                      ? it.price / 12
-                                      : it.price;
-
-                                  const updated = [...billItems];
-                                  updated[index] = {
-                                    ...updated[index],
-                                    name: it.name,
-                                    rate: Number(rate.toFixed(2)),
-                                    amount: rate * updated[index].quantity,
-                                    subCategory: it.subCategory || "",
-                                    searchQuery: "",
-                                  };
-                                  setBillItems(updated);
-                                }}
-                                className="px-3 py-2 text-gray-300 hover:bg-white/10 cursor-pointer"
-                              >
-                                {it.name}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                    </td>
-
-                    <td className="text-right">
-                      <input
-                        type="number"
-                        min="1"
-                        name="quantity"
-                        value={item.quantity}
-                        onChange={(e) => handleInputChange(index, e)}
-                        className="w-20 bg-[#0b0f1a] border border-white/10 px-2 py-2 rounded-md text-right text-white"
-                      />
-                    </td>
-
-                    <td className="text-right text-gray-300">
-                      {currencySymbol}
-                      {item.rate.toFixed(2)}
-                    </td>
-
-                    <td className="text-right text-white">
-                      {currencySymbol}
-                      {item.amount.toFixed(2)}
-                    </td>
-
-                    <td className="text-right">
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveItem(index)}
-                        className="text-gray-400 hover:text-red-400"
-                      >
-                        <FiTrash2 />
-                      </button>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm min-w-[500px]">
+                <thead className="text-gray-400">
+                  <tr>
+                    <th className="text-left">Item</th>
+                    <th className="text-right">Qty</th>
+                    <th className="text-right">Rate</th>
+                    <th className="text-right">Amount</th>
+                    <th />
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody>
+                  {billItems.map((item, index) => (
+                    <tr key={index} className="border-t border-white/5">
+                      {/* ITEM SEARCH */}
+                      <td className="relative py-3">
+                        <input
+                          name="name"
+                          value={item.name}
+                          onChange={(e) => handleInputChange(index, e)}
+                          placeholder="Search item"
+                          className="w-full bg-[#0b0f1a] border border-white/10 px-3 py-2 rounded-md text-white"
+                        />
+
+                        {item.searchQuery &&
+                          filteredItems(item.searchQuery).length > 0 && (
+                            <div className="absolute z-20 w-full mt-1 bg-[#0f1424] border border-white/10 rounded-md shadow-lg">
+                              {filteredItems(item.searchQuery).map((it) => (
+                                <div
+                                  key={it._id}
+                                  onClick={() => {
+                                    const rate =
+                                      it.subCategory === "dozen"
+                                        ? it.price / 12
+                                        : it.price;
+
+                                    const updated = [...billItems];
+                                    updated[index] = {
+                                      ...updated[index],
+                                      name: it.name,
+                                      rate: Number(rate.toFixed(2)),
+                                      amount: rate * updated[index].quantity,
+                                      subCategory: it.subCategory || "",
+                                      searchQuery: "",
+                                    };
+                                    setBillItems(updated);
+                                  }}
+                                  className="px-3 py-2 text-gray-300 hover:bg-white/10 cursor-pointer"
+                                >
+                                  {it.name}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                      </td>
+
+                      <td className="text-right">
+                        <input
+                          type="number"
+                          min="1"
+                          name="quantity"
+                          value={item.quantity}
+                          onChange={(e) => handleInputChange(index, e)}
+                          className="w-20 bg-[#0b0f1a] border border-white/10 px-2 py-2 rounded-md text-right text-white"
+                        />
+                      </td>
+
+                      <td className="text-right text-gray-300">
+                        {currencySymbol}
+                        {item.rate.toFixed(2)}
+                      </td>
+
+                      <td className="text-right text-white">
+                        {currencySymbol}
+                        {item.amount.toFixed(2)}
+                      </td>
+
+                      <td className="text-right">
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveItem(index)}
+                          className="text-gray-400 hover:text-red-400"
+                        >
+                          <FiTrash2 />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
-     
           <div className="flex justify-between items-center">
             <p className="text-xl text-white">
               Total:{" "}
@@ -396,8 +383,6 @@ const NewBill = () => {
           </div>
         </form>
       </div>
-
-      <ToastContainer position="bottom-right" />
     </div>
   );
 };

@@ -15,7 +15,7 @@ import {
 } from "react-icons/fi";
 
 const Profile = () => {
-  const { token, backendurl } = useContext(AppContext);
+  const { token, backendurl, logout } = useContext(AppContext);
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState(null);
@@ -42,7 +42,7 @@ const Profile = () => {
       try {
         const { data } = await axios.get(
           `${backendurl}/api/user/get-user-data`,
-          { headers: { token } }
+          { headers: { token } },
         );
 
         if (data.success) {
@@ -57,8 +57,11 @@ const Profile = () => {
         } else {
           toast.error(data.message);
         }
-      } catch {
-        toast.error("Failed to load profile");
+      } catch (err) {
+        // 401 handled by interceptor
+        if (err.response?.status !== 401) {
+          toast.error("Failed to load profile");
+        }
       } finally {
         setLoading(false);
       }
@@ -89,7 +92,7 @@ const Profile = () => {
       const { data } = await axios.put(
         `${backendurl}/api/user/update-user-data`,
         formData,
-        { headers: { token } }
+        { headers: { token } },
       );
 
       if (data.success) {
@@ -109,31 +112,43 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-900 text-neutral-400">
-        Loading profile…
+      <div className="min-h-screen flex items-center justify-center bg-[#0b0f1a] text-gray-400">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
+          <span>Loading profile…</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!userData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0b0f1a] text-gray-400">
+        <p>Unable to load profile data.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-neutral-900 pt-24 pb-12 px-4">
+    <div className="min-h-screen bg-[#0b0f1a] pt-24 pb-12 px-4">
       <div className="max-w-3xl mx-auto space-y-6">
-
         {/* HEADER */}
-        <div className="relative rounded-2xl bg-gradient-to-br from-neutral-800 to-neutral-900 border border-white/10 p-6 flex items-center gap-5">
-          <div className="h-16 w-16 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-2xl font-semibold">
-            {userData.name.charAt(0).toUpperCase()}
+        <div className="relative rounded-2xl bg-[#0f1424] border border-white/10 p-6 flex items-center gap-5">
+          <div className="h-16 w-16 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-2xl font-semibold shrink-0">
+            {userData.name?.charAt(0).toUpperCase()}
           </div>
 
           <div className="flex-1">
-            <h2 className="text-xl font-semibold text-white">{userData.name}</h2>
-            <p className="text-sm text-neutral-400">{userData.email}</p>
+            <h2 className="text-xl font-semibold text-white">
+              {userData.name}
+            </h2>
+            <p className="text-sm text-gray-400">{userData.email}</p>
           </div>
 
           {!isEditing && (
             <button
               onClick={() => setIsEditing(true)}
-              className="flex items-center gap-2 text-sm text-neutral-300 hover:text-cyan-400 transition"
+              className="flex items-center gap-2 text-sm text-gray-300 hover:text-cyan-400 transition"
             >
               <FiEdit2 /> Edit
             </button>
@@ -143,28 +158,60 @@ const Profile = () => {
         {/* DETAILS */}
         <form
           onSubmit={handleSave}
-          className="rounded-2xl bg-neutral-800/60 border border-white/10 p-6 space-y-8"
+          className="rounded-2xl bg-[#0f1424] border border-white/10 p-6 space-y-8"
         >
           <section>
-            <h3 className="text-sm font-semibold text-neutral-300 mb-4 uppercase">
+            <h3 className="text-sm font-semibold text-gray-300 mb-4 uppercase">
               Personal Information
             </h3>
 
             <div className="grid md:grid-cols-2 gap-4">
-              <Input icon={<FiUser />} label="Full Name" name="name" value={formData.name} onChange={handleChange} disabled={!isEditing} />
-              <ReadOnlyInput icon={<FiMail />} label="Email" value={userData.email} />
-              <Input icon={<FiPhone />} label="Phone Number" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} disabled={!isEditing} />
+              <Input
+                icon={<FiUser />}
+                label="Full Name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                disabled={!isEditing}
+              />
+              <ReadOnlyInput
+                icon={<FiMail />}
+                label="Email"
+                value={userData.email}
+              />
+              <Input
+                icon={<FiPhone />}
+                label="Phone Number"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                disabled={!isEditing}
+              />
             </div>
           </section>
 
           <section>
-            <h3 className="text-sm font-semibold text-neutral-300 mb-4 uppercase">
+            <h3 className="text-sm font-semibold text-gray-300 mb-4 uppercase">
               Business Details
             </h3>
 
             <div className="grid md:grid-cols-2 gap-4">
-              <Input icon={<FiBriefcase />} label="Company Name" name="companyName" value={formData.companyName} onChange={handleChange} disabled={!isEditing} />
-              <Input icon={<FiMapPin />} label="Business Address" name="address" value={formData.address} onChange={handleChange} disabled={!isEditing} />
+              <Input
+                icon={<FiBriefcase />}
+                label="Company Name"
+                name="companyName"
+                value={formData.companyName}
+                onChange={handleChange}
+                disabled={!isEditing}
+              />
+              <Input
+                icon={<FiMapPin />}
+                label="Business Address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                disabled={!isEditing}
+              />
             </div>
           </section>
 
@@ -173,7 +220,7 @@ const Profile = () => {
               <button
                 type="button"
                 onClick={handleCancel}
-                className="w-full py-3 rounded-xl border border-white/10 text-neutral-300 hover:bg-neutral-700 transition flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl border border-white/10 text-gray-300 hover:bg-white/5 transition flex items-center justify-center gap-2"
               >
                 <FiX /> Cancel
               </button>
@@ -181,7 +228,7 @@ const Profile = () => {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="w-full bg-cyan-500 text-black font-semibold py-3 rounded-xl hover:bg-cyan-400 transition flex items-center justify-center gap-2"
+                className="w-full bg-cyan-500 text-black font-semibold py-3 rounded-xl hover:bg-cyan-400 transition flex items-center justify-center gap-2 disabled:opacity-60"
               >
                 <FiSave />
                 {isSaving ? "Saving…" : "Save Changes"}
@@ -196,18 +243,22 @@ const Profile = () => {
 
 const Input = ({ icon, label, disabled, ...props }) => (
   <div>
-    <label className="text-xs text-neutral-400 mb-1 block">{label}</label>
-    <div className="flex items-center gap-3 bg-neutral-900 border border-white/10 rounded-lg px-4 py-3">
-      <span className="text-neutral-400">{icon}</span>
-      <input {...props} disabled={disabled} className="w-full bg-transparent outline-none text-sm text-white disabled:text-neutral-400" />
+    <label className="text-xs text-gray-400 mb-1 block">{label}</label>
+    <div className="flex items-center gap-3 bg-[#0b0f1a] border border-white/10 rounded-lg px-4 py-3">
+      <span className="text-gray-400">{icon}</span>
+      <input
+        {...props}
+        disabled={disabled}
+        className="w-full bg-transparent outline-none text-sm text-white disabled:text-gray-500"
+      />
     </div>
   </div>
 );
 
 const ReadOnlyInput = ({ icon, label, value }) => (
   <div>
-    <label className="text-xs text-neutral-400 mb-1 block">{label}</label>
-    <div className="flex items-center gap-3 bg-neutral-900 border border-white/10 rounded-lg px-4 py-3 text-sm text-neutral-400">
+    <label className="text-xs text-gray-400 mb-1 block">{label}</label>
+    <div className="flex items-center gap-3 bg-[#0b0f1a] border border-white/10 rounded-lg px-4 py-3 text-sm text-gray-400">
       <span>{icon}</span>
       <span>{value}</span>
     </div>

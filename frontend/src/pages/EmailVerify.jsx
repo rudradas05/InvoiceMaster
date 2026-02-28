@@ -49,14 +49,17 @@ const EmailVerify = () => {
   const sendVerificationOtp = async () => {
     try {
       if (!userData || !userData._id) {
-        toast.error("User data not loaded. Please refresh and try again.", toastConfig);
+        toast.error(
+          "User data not loaded. Please refresh and try again.",
+          toastConfig,
+        );
         return;
       }
       const userId = userData._id;
       const { data } = await axios.post(
         `${backendurl}/api/user/send-verify-otp`,
         { userId },
-        { headers: { token } }
+        { headers: { token } },
       );
 
       if (data.success) {
@@ -83,14 +86,17 @@ const EmailVerify = () => {
 
     try {
       if (!userData || !userData._id) {
-        toast.error("User data not loaded. Please refresh and try again.", toastConfig);
+        toast.error(
+          "User data not loaded. Please refresh and try again.",
+          toastConfig,
+        );
         return;
       }
       const userId = userData._id;
       const { data } = await axios.post(
         `${backendurl}/api/user/verify-account`,
         { userId, otp: enteredOtp },
-        { headers: { token } }
+        { headers: { token } },
       );
 
       if (data.success) {
@@ -106,43 +112,42 @@ const EmailVerify = () => {
   };
 
   const inputClass = (index) =>
-    `w-12 h-12 bg-[#333A5C] text-white text-center text-xl rounded-md ${
+    `w-12 h-12 bg-[#0b0f1a] border border-white/10 text-white text-center text-xl rounded-lg focus:outline-none focus:border-cyan-400 ${
       isOtpInvalid && inputRefs.current[index]?.value === ""
         ? "border-red-500"
         : ""
     }`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 pt-24 pb-12 flex items-center justify-center">
-      <div className="max-w-md w-full bg-white/5 border border-white/10 rounded-2xl shadow-lg p-8 backdrop-blur-md">
-        <div className="flex flex-col items-center justify-center min-h-[80vh]">
-          <h1 className="text-2xl font-semibold mb-4">
-            Welcome to InvoiceMaster Pro
+    <div className="min-h-screen bg-[#0b0f1a] flex items-center justify-center px-4 pt-24 pb-16">
+      <div className="w-full max-w-md rounded-xl border border-white/10 bg-[#0f1424] p-8">
+        <div className="flex flex-col items-center text-center">
+          <h1 className="text-xl font-semibold text-white tracking-tight mb-2">
+            Email Verification
           </h1>
-          <p className="mb-6 text-center">
-            For the first time and to stay updated with us, please verify your
-            email.
+          <p className="text-sm text-gray-400 mb-8">
+            Verify your email to activate your account and access all features.
           </p>
 
           {!isOtpSubmitted ? (
             <button
               onClick={sendVerificationOtp}
-              className="px-6 py-3 rounded-full bg-gradient-to-r from-indigo-600 to-violet-900 text-white font-medium"
+              className="rounded-lg bg-cyan-500 px-8 py-3 text-sm font-semibold text-black hover:bg-cyan-400 transition"
             >
               Send Verification OTP
             </button>
           ) : (
-            <form
-              onSubmit={verifyOtp}
-              className="bg-slate-900 p-8 rounded-lg shadow-lg w-96 text-sm"
-            >
-              <h1 className="text-white text-2xl font-semibold text-center mb-4">
-                Verify Email
-              </h1>
-              <p className="text-center mb-6 text-indigo-300">
-                Enter the 6-digit code sent to your email ID.
-              </p>
-              <div className="flex justify-between mb-8" onPaste={handlePaste}>
+            <form onSubmit={verifyOtp} className="w-full space-y-6">
+              <div className="text-center">
+                <h2 className="text-lg font-semibold text-white mb-2">
+                  Enter OTP
+                </h2>
+                <p className="text-sm text-gray-400">
+                  Enter the 6-digit code sent to your email
+                </p>
+              </div>
+
+              <div className="flex justify-between gap-2" onPaste={handlePaste}>
                 {Array(6)
                   .fill("")
                   .map((_, index) => (
@@ -157,9 +162,10 @@ const EmailVerify = () => {
                     />
                   ))}
               </div>
+
               <button
                 type="submit"
-                className="w-full py-2.5 rounded-full bg-gradient-to-r from-indigo-600 to-violet-900 text-white font-medium"
+                className="w-full rounded-lg bg-cyan-500 py-3 text-sm font-semibold text-black hover:bg-cyan-400 transition"
               >
                 Verify OTP
               </button>

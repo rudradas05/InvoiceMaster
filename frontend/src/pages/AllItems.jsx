@@ -31,16 +31,14 @@ const AllItems = () => {
     let filtered = items;
 
     if (selectedCategory) {
-      filtered = filtered.filter(
-        (item) => item.category === selectedCategory
-      );
+      filtered = filtered.filter((item) => item.category === selectedCategory);
     }
 
     if (search.trim()) {
       filtered = filtered.filter(
         (item) =>
           item.name.toLowerCase().includes(search.toLowerCase()) ||
-          item.category.toLowerCase().includes(search.toLowerCase())
+          item.category.toLowerCase().includes(search.toLowerCase()),
       );
     }
 
@@ -57,7 +55,7 @@ const AllItems = () => {
       const { data } = await axios.post(
         `${backendurl}/api/user/remove-item`,
         { itemId, userId: userData.userId },
-        { headers: { token } }
+        { headers: { token } },
       );
 
       if (data.success) {
@@ -70,8 +68,6 @@ const AllItems = () => {
       toast.error(error.message);
     }
   };
-  
-  
 
   return (
     <div className="min-h-screen bg-[#0b0f1a] pt-24 pb-16">
@@ -147,60 +143,60 @@ const AllItems = () => {
 
         {/* Table */}
         <div className="overflow-hidden rounded-xl border border-white/10 bg-[#0f1424]">
-          <table className="w-full text-sm text-left">
-            <thead className="bg-[#0b0f1a] text-gray-400">
-              <tr>
-                <th className="px-5 py-3 font-medium">Name</th>
-                <th className="px-5 py-3 font-medium">Category</th>
-                <th className="px-5 py-3 font-medium text-right">Price</th>
-                <th className="px-5 py-3 font-medium text-right">Quantity</th>
-                <th className="px-5 py-3 font-medium text-right">Actions</th>
-              </tr>
-            </thead>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left min-w-[600px]">
+              <thead className="bg-[#0b0f1a] text-gray-400">
+                <tr>
+                  <th className="px-5 py-3 font-medium">Name</th>
+                  <th className="px-5 py-3 font-medium">Category</th>
+                  <th className="px-5 py-3 font-medium text-right">Price</th>
+                  <th className="px-5 py-3 font-medium text-right">Quantity</th>
+                  <th className="px-5 py-3 font-medium text-right">Actions</th>
+                </tr>
+              </thead>
 
-            <tbody>
-              {filterItems.length > 0 ? (
-                filterItems.map((item) => (
-                  <tr
-                    key={item._id}
-                    className="border-t border-white/5 hover:bg-white/5 transition"
-                  >
-                    <td className="px-5 py-4 text-white">
-                      {item.name}
-                    </td>
-                    <td className="px-5 py-4 text-gray-400">
-                      {item.category}
-                    </td>
-                    <td className="px-5 py-4 text-right text-white">
-                      {currencySymbol}
-                      {item.price}
-                    </td>
-                    <td className="px-5 py-4 text-right text-gray-300">
-                      {item.quantity ?? "—"}
-                    </td>
-                    <td className="px-5 py-4 text-right">
-                      <button
-                        onClick={() => removeItem(item._id)}
-                        className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-red-400 hover:bg-white/10 transition"
-                        title="Delete item"
-                      >
-                        <FiTrash2 />
-                      </button>
+              <tbody>
+                {filterItems.length > 0 ? (
+                  filterItems.map((item) => (
+                    <tr
+                      key={item._id}
+                      className="border-t border-white/5 hover:bg-white/5 transition"
+                    >
+                      <td className="px-5 py-4 text-white">{item.name}</td>
+                      <td className="px-5 py-4 text-gray-400">
+                        {item.category}
+                      </td>
+                      <td className="px-5 py-4 text-right text-white">
+                        {currencySymbol}
+                        {item.price}
+                      </td>
+                      <td className="px-5 py-4 text-right text-gray-300">
+                        {item.quantity ?? "—"}
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        <button
+                          onClick={() => removeItem(item._id)}
+                          className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-red-400 hover:bg-white/10 transition"
+                          title="Delete item"
+                        >
+                          <FiTrash2 />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={5}
+                      className="py-10 text-center text-sm text-gray-500"
+                    >
+                      No items found
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={5}
-                    className="py-10 text-center text-sm text-gray-500"
-                  >
-                    No items found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

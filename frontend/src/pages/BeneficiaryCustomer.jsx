@@ -38,7 +38,8 @@ const BeneficiaryCustomer = () => {
       filtered = customers.filter(
         (customer) =>
           customer.name.toLowerCase().includes(search.toLowerCase()) ||
-          (customer.email && customer.email.toLowerCase().includes(search.toLowerCase()))
+          (customer.email &&
+            customer.email.toLowerCase().includes(search.toLowerCase())),
       );
     }
     setFilteredCustomers(filtered);
@@ -47,9 +48,12 @@ const BeneficiaryCustomer = () => {
   const handleDelete = async (customerId) => {
     if (window.confirm("Are you sure you want to delete this customer?")) {
       try {
-        const { data } = await axios.delete(`${backendurl}/api/customer/${customerId}`, {
-          headers: { token },
-        });
+        const { data } = await axios.delete(
+          `${backendurl}/api/customer/${customerId}`,
+          {
+            headers: { token },
+          },
+        );
         if (data.success) {
           toast.success(data.message);
           getAllCustomers();
@@ -96,62 +100,72 @@ const BeneficiaryCustomer = () => {
         </div>
 
         <div className="overflow-hidden rounded-xl border border-white/10 bg-[#0f1424]">
-          <table className="w-full text-sm text-left">
-            <thead className="bg-[#0b0f1a] text-gray-400">
-              <tr>
-                <th className="px-5 py-3 font-medium">Name</th>
-                <th className="px-5 py-3 font-medium">Email</th>
-                <th className="px-5 py-3 font-medium">Phone</th>
-                <th className="px-5 py-3 font-medium text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredCustomers.length > 0 ? (
-                filteredCustomers.map((customer) => (
-                  <tr
-                    key={customer._id}
-                    className="border-t border-white/5 hover:bg-white/5 transition"
-                  >
-                    <td className="px-5 py-4 text-white">{customer.name}</td>
-                    <td className="px-5 py-4 text-gray-400">{customer.email}</td>
-                    <td className="px-5 py-4 text-gray-400">{customer.phone}</td>
-                    <td className="px-5 py-4 text-right">
-                      <button
-                        onClick={() => navigate(`/update-customer/${customer._id}`)}
-                        className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-cyan-400 hover:bg-white/10 transition"
-                        title="Update customer"
-                      >
-                        <FiEdit />
-                      </button>
-                      <button
-                        onClick={() => navigate("/billing", { state: { customer } })}
-                        className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-green-400 hover:bg-white/10 transition"
-                        title="Create Bill"
-                      >
-                        <FiFileText />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(customer._id)}
-                        className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-red-400 hover:bg-white/10 transition"
-                        title="Delete customer"
-                      >
-                        <FiTrash2 />
-                      </button>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left min-w-[600px]">
+              <thead className="bg-[#0b0f1a] text-gray-400">
+                <tr>
+                  <th className="px-5 py-3 font-medium">Name</th>
+                  <th className="px-5 py-3 font-medium">Email</th>
+                  <th className="px-5 py-3 font-medium">Phone</th>
+                  <th className="px-5 py-3 font-medium text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredCustomers.length > 0 ? (
+                  filteredCustomers.map((customer) => (
+                    <tr
+                      key={customer._id}
+                      className="border-t border-white/5 hover:bg-white/5 transition"
+                    >
+                      <td className="px-5 py-4 text-white">{customer.name}</td>
+                      <td className="px-5 py-4 text-gray-400">
+                        {customer.email}
+                      </td>
+                      <td className="px-5 py-4 text-gray-400">
+                        {customer.phone}
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        <button
+                          onClick={() =>
+                            navigate(`/update-customer/${customer._id}`)
+                          }
+                          className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-cyan-400 hover:bg-white/10 transition"
+                          title="Update customer"
+                        >
+                          <FiEdit />
+                        </button>
+                        <button
+                          onClick={() =>
+                            navigate("/billing", { state: { customer } })
+                          }
+                          className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-green-400 hover:bg-white/10 transition"
+                          title="Create Bill"
+                        >
+                          <FiFileText />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(customer._id)}
+                          className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-red-400 hover:bg-white/10 transition"
+                          title="Delete customer"
+                        >
+                          <FiTrash2 />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={4}
+                      className="py-10 text-center text-sm text-gray-500"
+                    >
+                      No customers found
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={4}
-                    className="py-10 text-center text-sm text-gray-500"
-                  >
-                    No customers found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

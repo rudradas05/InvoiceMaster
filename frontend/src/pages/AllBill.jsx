@@ -25,7 +25,8 @@ const AllBill = () => {
       return;
     }
     getAllBills();
-  }, [token, navigate, getAllBills]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, navigate]);
 
   const filteredBills = bills.filter((bill) =>
     bill.name.toLowerCase().includes(searchQuery.toLowerCase()),

@@ -18,7 +18,7 @@ import AddCustomer from "./pages/AddCustomer";
 
 const App = () => {
   return (
-    <div className=" mx-4 sm:mx-[5%]">
+    <div className="min-h-screen bg-[#0b0f1a]">
       <ToastContainer />
       <Navbar />
       <Routes>
@@ -29,8 +29,8 @@ const App = () => {
         <Route path="/add-customer" element={<AddCustomer />} />
         <Route path="/update-customer/:id" element={<UpdateCustomer />} />
         <Route path="/all-bills" element={<AllBill />} />
-        <Route path="billing" element={<NewBill />} />
-        <Route path="login" element={<Login />} />
+        <Route path="/billing" element={<NewBill />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/email-verify" element={<EmailVerify />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/profile" element={<Profile />} />

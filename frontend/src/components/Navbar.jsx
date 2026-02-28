@@ -13,25 +13,47 @@ import {
 } from "react-icons/ri";
 
 const Navbar = () => {
-  const { token, setToken, setIsLoggedin } = useContext(AppContext);
+  const { token, logout } = useContext(AppContext);
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
-    { name: "Dashboard", path: "/", icon: <RiDashboardLine className="w-5 h-5" /> },
-    { name: "Bills", path: "/all-bills", icon: <RiBillLine className="w-5 h-5" /> },
-    { name: "New Bill", path: "/billing", icon: <RiAddBoxLine className="w-5 h-5" /> },
-    { name: "Items", path: "/add-items", icon: <RiAddBoxLine className="w-5 h-5" /> },
-    { name: "Inventory", path: "/all-items", icon: <RiStackLine className="w-5 h-5" /> },
-    { name: "Customers", path: "/beneficiary-customer", icon: <RiTeamLine className="w-5 h-5" /> },
+    {
+      name: "Dashboard",
+      path: "/",
+      icon: <RiDashboardLine className="w-5 h-5" />,
+    },
+    {
+      name: "Bills",
+      path: "/all-bills",
+      icon: <RiBillLine className="w-5 h-5" />,
+    },
+    {
+      name: "New Bill",
+      path: "/billing",
+      icon: <RiAddBoxLine className="w-5 h-5" />,
+    },
+    {
+      name: "Items",
+      path: "/add-items",
+      icon: <RiAddBoxLine className="w-5 h-5" />,
+    },
+    {
+      name: "Inventory",
+      path: "/all-items",
+      icon: <RiStackLine className="w-5 h-5" />,
+    },
+    {
+      name: "Customers",
+      path: "/beneficiary-customer",
+      icon: <RiTeamLine className="w-5 h-5" />,
+    },
   ];
 
-  const logout = () => {
-    setToken("");
-    localStorage.removeItem("token");
-    setIsLoggedin(false);
+  const handleLogout = () => {
+    logout();
     setIsMenuOpen(false);
-    navigate("/");
+    navigate("/login");
   };
 
   const linkBase =
@@ -59,9 +81,7 @@ const Navbar = () => {
                 to={item.path}
                 className={({ isActive }) =>
                   `${linkBase} ${
-                    isActive
-                      ? "text-white"
-                      : "text-gray-400 hover:text-white"
+                    isActive ? "text-white" : "text-gray-400 hover:text-white"
                   }`
                 }
               >
@@ -86,9 +106,7 @@ const Navbar = () => {
                   to="/profile"
                   className={({ isActive }) =>
                     `${linkBase} ${
-                      isActive
-                        ? "text-white"
-                        : "text-gray-400 hover:text-white"
+                      isActive ? "text-white" : "text-gray-400 hover:text-white"
                     }`
                   }
                 >
@@ -104,7 +122,7 @@ const Navbar = () => {
                 </NavLink>
 
                 <button
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="ml-2 flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-400 hover:text-red-400 transition"
                 >
                   <RiLogoutCircleRLine className="w-5 h-5" />
@@ -127,7 +145,11 @@ const Navbar = () => {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden text-gray-400 hover:text-white transition"
           >
-            {isMenuOpen ? <FiX className="w-6 h-6" /> : <FiMenu className="w-6 h-6" />}
+            {isMenuOpen ? (
+              <FiX className="w-6 h-6" />
+            ) : (
+              <FiMenu className="w-6 h-6" />
+            )}
           </button>
         </div>
 
@@ -164,7 +186,7 @@ const Navbar = () => {
                 </NavLink>
 
                 <button
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-400 hover:bg-white/5 hover:text-red-400 transition"
                 >
                   <RiLogoutCircleRLine className="w-5 h-5" />
