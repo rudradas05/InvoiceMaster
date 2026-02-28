@@ -186,10 +186,15 @@ const NewBill = () => {
   return (
     <div className="min-h-screen bg-[#0b0f1a] pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-6">
-        <h1 className="text-2xl font-semibold text-white mb-6">New Bill</h1>
+        <h1 className="text-2xl font-semibold text-white mb-6 animate-fade-in-up">
+          New Bill
+        </h1>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="bg-[#0f1424] border border-white/10 rounded-xl p-6">
+          <div
+            className="bg-[#0f1424] border border-white/10 rounded-xl p-6 animate-fade-in-up"
+            style={{ animationDelay: "0.05s" }}
+          >
             <p className="text-white font-semibold">{userData?.companyName}</p>
             <p className="text-gray-400 text-sm">Prop. {userData?.name}</p>
             <p className="text-gray-400 text-sm">{userData?.address}</p>
@@ -198,7 +203,10 @@ const NewBill = () => {
             </p>
           </div>
 
-          <div className="bg-[#0f1424] border border-white/10 rounded-xl p-6 grid md:grid-cols-2 gap-6">
+          <div
+            className="bg-[#0f1424] border border-white/10 rounded-xl p-6 grid md:grid-cols-2 gap-6 animate-fade-in-up"
+            style={{ animationDelay: "0.1s" }}
+          >
             <div className="relative">
               <input
                 value={customerName}
@@ -257,7 +265,10 @@ const NewBill = () => {
             </div>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-[#0f1424] p-6">
+          <div
+            className="rounded-xl border border-white/10 bg-[#0f1424] p-6 animate-fade-in-up"
+            style={{ animationDelay: "0.15s" }}
+          >
             <div className="flex justify-between mb-4">
               <h2 className="text-sm font-medium text-gray-300 uppercase tracking-wider">
                 Items
@@ -265,7 +276,7 @@ const NewBill = () => {
               <button
                 type="button"
                 onClick={handleAddItem}
-                className="flex items-center gap-2 bg-cyan-500 px-4 py-2 rounded-lg text-black font-semibold hover:bg-cyan-400 transition"
+                className="flex items-center gap-2 bg-cyan-500 px-4 py-2 rounded-lg text-black font-semibold hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 btn-press"
               >
                 <FiPlus /> Add Item
               </button>
@@ -365,10 +376,13 @@ const NewBill = () => {
             </div>
           </div>
 
-          <div className="flex justify-between items-center">
+          <div
+            className="flex justify-between items-center animate-fade-in-up"
+            style={{ animationDelay: "0.2s" }}
+          >
             <p className="text-xl text-white">
               Total:{" "}
-              <span className="text-cyan-400">
+              <span className="text-cyan-400 font-bold">
                 {currencySymbol}
                 {total.toFixed(2)}
               </span>
@@ -376,7 +390,7 @@ const NewBill = () => {
 
             <button
               type="submit"
-              className="bg-cyan-500 px-8 py-3 rounded-lg text-black font-semibold"
+              className="bg-cyan-500 px-8 py-3 rounded-lg text-black font-semibold hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 btn-press"
             >
               Generate Bill
             </button>

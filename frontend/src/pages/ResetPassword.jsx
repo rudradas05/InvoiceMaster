@@ -107,9 +107,10 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0f1a] flex items-center justify-center px-4 pt-24 pb-16">
+    <div className="min-h-screen bg-[#0b0f1a] flex items-center justify-center px-4 pt-24 pb-16 relative overflow-hidden">
+      <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
       {!isEmailSent && (
-        <div className="w-full max-w-md rounded-xl border border-white/10 bg-[#0f1424] p-8">
+        <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0f1424]/80 backdrop-blur-xl p-8 animate-scale-in relative z-10">
           <div className="mb-8 text-center">
             <h1 className="text-xl font-semibold text-white tracking-tight">
               Reset Password
@@ -149,7 +150,7 @@ const ResetPassword = () => {
       )}
 
       {isEmailSent && !isOtpSubmitted && (
-        <div className="w-full max-w-md rounded-xl border border-white/10 bg-[#0f1424] p-8">
+        <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0f1424]/80 backdrop-blur-xl p-8 animate-scale-in relative z-10">
           <div className="mb-8 text-center">
             <h1 className="text-xl font-semibold text-white tracking-tight">
               Enter OTP
@@ -186,7 +187,7 @@ const ResetPassword = () => {
       )}
 
       {isOtpSubmitted && isEmailSent && (
-        <div className="w-full max-w-md rounded-xl border border-white/10 bg-[#0f1424] p-8">
+        <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0f1424]/80 backdrop-blur-xl p-8 animate-scale-in relative z-10">
           <div className="mb-8 text-center">
             <h1 className="text-xl font-semibold text-white tracking-tight">
               New Password

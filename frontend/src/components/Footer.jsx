@@ -12,8 +12,8 @@ const Footer = () => {
               Invoice<span className="text-cyan-400">Master</span>
             </h2>
             <p className="text-sm text-gray-400 max-w-sm">
-              A modern billing & invoicing platform designed for speed,
-              clarity, and control.
+              A modern billing & invoicing platform designed for speed, clarity,
+              and control.
             </p>
           </div>
 
@@ -23,13 +23,13 @@ const Footer = () => {
               <span className="text-xs uppercase tracking-wider text-gray-500">
                 Product
               </span>
-              <a className="text-gray-400 hover:text-white transition">
+              <a className="text-gray-400 hover:text-cyan-400 transition-colors duration-200 cursor-pointer">
                 Billing
               </a>
-              <a className="text-gray-400 hover:text-white transition">
+              <a className="text-gray-400 hover:text-cyan-400 transition-colors duration-200 cursor-pointer">
                 Inventory
               </a>
-              <a className="text-gray-400 hover:text-white transition">
+              <a className="text-gray-400 hover:text-cyan-400 transition-colors duration-200 cursor-pointer">
                 Reports
               </a>
             </div>
@@ -38,13 +38,13 @@ const Footer = () => {
               <span className="text-xs uppercase tracking-wider text-gray-500">
                 Company
               </span>
-              <a className="text-gray-400 hover:text-white transition">
+              <a className="text-gray-400 hover:text-cyan-400 transition-colors duration-200 cursor-pointer">
                 About
               </a>
-              <a className="text-gray-400 hover:text-white transition">
+              <a className="text-gray-400 hover:text-cyan-400 transition-colors duration-200 cursor-pointer">
                 Privacy
               </a>
-              <a className="text-gray-400 hover:text-white transition">
+              <a className="text-gray-400 hover:text-cyan-400 transition-colors duration-200 cursor-pointer">
                 Terms
               </a>
             </div>
@@ -52,7 +52,7 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <div className="my-8 h-px bg-white/10" />
+        <div className="my-8 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

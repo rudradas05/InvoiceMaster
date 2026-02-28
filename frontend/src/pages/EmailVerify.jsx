@@ -119,8 +119,9 @@ const EmailVerify = () => {
     }`;
 
   return (
-    <div className="min-h-screen bg-[#0b0f1a] flex items-center justify-center px-4 pt-24 pb-16">
-      <div className="w-full max-w-md rounded-xl border border-white/10 bg-[#0f1424] p-8">
+    <div className="min-h-screen bg-[#0b0f1a] flex items-center justify-center px-4 pt-24 pb-16 relative overflow-hidden">
+      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0f1424]/80 backdrop-blur-xl p-8 animate-scale-in relative z-10">
         <div className="flex flex-col items-center text-center">
           <h1 className="text-xl font-semibold text-white tracking-tight mb-2">
             Email Verification
@@ -132,7 +133,7 @@ const EmailVerify = () => {
           {!isOtpSubmitted ? (
             <button
               onClick={sendVerificationOtp}
-              className="rounded-lg bg-cyan-500 px-8 py-3 text-sm font-semibold text-black hover:bg-cyan-400 transition"
+              className="rounded-lg bg-cyan-500 px-8 py-3 text-sm font-semibold text-black hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 btn-press"
             >
               Send Verification OTP
             </button>
@@ -165,7 +166,7 @@ const EmailVerify = () => {
 
               <button
                 type="submit"
-                className="w-full rounded-lg bg-cyan-500 py-3 text-sm font-semibold text-black hover:bg-cyan-400 transition"
+                className="w-full rounded-lg bg-cyan-500 py-3 text-sm font-semibold text-black hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 btn-press"
               >
                 Verify OTP
               </button>

@@ -42,17 +42,17 @@ const Home = () => {
     <div className="min-h-screen bg-[#0b0f1a] pt-24 pb-16">
       <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-2xl font-semibold text-white tracking-tight">
+        <div className="mb-12 animate-fade-in-up">
+          <h1 className="text-3xl font-bold text-white tracking-tight">
             Dashboard
           </h1>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-gray-400 mt-2">
             Manage billing, inventory, and transactions
           </p>
         </div>
 
         {/* Action Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 stagger-children">
           {cards.map((card, index) => {
             const Icon = card.icon;
 
@@ -60,17 +60,17 @@ const Home = () => {
               <button
                 key={index}
                 onClick={() => navigate(card.path)}
-                className={`group flex items-start gap-4 rounded-xl border p-6 text-left transition ${
+                className={`group flex items-start gap-4 rounded-xl border p-6 text-left transition-all duration-300 hover-lift ${
                   card.primary
-                    ? "border-cyan-400/40 bg-cyan-500/10 hover:bg-cyan-500/20"
-                    : "border-white/10 bg-[#0f1424] hover:bg-white/5"
+                    ? "border-cyan-400/40 bg-cyan-500/10 hover:bg-cyan-500/20 hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/10"
+                    : "border-white/10 bg-[#0f1424] hover:bg-white/5 hover:border-white/20"
                 }`}
               >
                 <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-lg ${
+                  className={`flex h-12 w-12 items-center justify-center rounded-lg transition-all duration-300 group-hover:scale-110 ${
                     card.primary
-                      ? "bg-cyan-500 text-black"
-                      : "bg-white/10 text-gray-300"
+                      ? "bg-cyan-500 text-black group-hover:shadow-lg group-hover:shadow-cyan-500/30"
+                      : "bg-white/10 text-gray-300 group-hover:bg-white/15"
                   }`}
                 >
                   <Icon className="h-6 w-6" />
@@ -84,10 +84,14 @@ const Home = () => {
                   >
                     {card.title}
                   </h3>
-                  <p className="mt-1 text-sm text-gray-400">
+                  <p className="mt-1 text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
                     {card.description}
                   </p>
                 </div>
+
+                <span className="text-gray-600 group-hover:text-gray-400 group-hover:translate-x-1 transition-all duration-300 mt-1">
+                  &rarr;
+                </span>
               </button>
             );
           })}

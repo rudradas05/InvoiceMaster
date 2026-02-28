@@ -133,8 +133,8 @@ const Profile = () => {
     <div className="min-h-screen bg-[#0b0f1a] pt-24 pb-12 px-4">
       <div className="max-w-3xl mx-auto space-y-6">
         {/* HEADER */}
-        <div className="relative rounded-2xl bg-[#0f1424] border border-white/10 p-6 flex items-center gap-5">
-          <div className="h-16 w-16 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-2xl font-semibold shrink-0">
+        <div className="relative rounded-2xl bg-[#0f1424] border border-white/10 p-6 flex items-center gap-5 animate-fade-in-up hover-lift">
+          <div className="h-16 w-16 rounded-full bg-gradient-to-br from-cyan-500/30 to-purple-500/20 flex items-center justify-center text-cyan-400 text-2xl font-semibold shrink-0 ring-2 ring-cyan-500/20">
             {userData.name?.charAt(0).toUpperCase()}
           </div>
 
@@ -148,7 +148,7 @@ const Profile = () => {
           {!isEditing && (
             <button
               onClick={() => setIsEditing(true)}
-              className="flex items-center gap-2 text-sm text-gray-300 hover:text-cyan-400 transition"
+              className="flex items-center gap-2 text-sm text-gray-300 hover:text-cyan-400 transition-all duration-200 hover:scale-105"
             >
               <FiEdit2 /> Edit
             </button>
@@ -158,7 +158,8 @@ const Profile = () => {
         {/* DETAILS */}
         <form
           onSubmit={handleSave}
-          className="rounded-2xl bg-[#0f1424] border border-white/10 p-6 space-y-8"
+          className="rounded-2xl bg-[#0f1424] border border-white/10 p-6 space-y-8 animate-fade-in-up"
+          style={{ animationDelay: "0.1s" }}
         >
           <section>
             <h3 className="text-sm font-semibold text-gray-300 mb-4 uppercase">
@@ -220,7 +221,7 @@ const Profile = () => {
               <button
                 type="button"
                 onClick={handleCancel}
-                className="w-full py-3 rounded-xl border border-white/10 text-gray-300 hover:bg-white/5 transition flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl border border-white/10 text-gray-300 hover:bg-white/5 transition-all duration-200 flex items-center justify-center gap-2 btn-press"
               >
                 <FiX /> Cancel
               </button>
@@ -228,7 +229,7 @@ const Profile = () => {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="w-full bg-cyan-500 text-black font-semibold py-3 rounded-xl hover:bg-cyan-400 transition flex items-center justify-center gap-2 disabled:opacity-60"
+                className="w-full bg-cyan-500 text-black font-semibold py-3 rounded-xl hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-60 btn-press"
               >
                 <FiSave />
                 {isSaving ? "Saving…" : "Save Changes"}
@@ -244,7 +245,7 @@ const Profile = () => {
 const Input = ({ icon, label, disabled, ...props }) => (
   <div>
     <label className="text-xs text-gray-400 mb-1 block">{label}</label>
-    <div className="flex items-center gap-3 bg-[#0b0f1a] border border-white/10 rounded-lg px-4 py-3">
+    <div className="flex items-center gap-3 bg-[#0b0f1a] border border-white/10 rounded-lg px-4 py-3 glow-border transition-all duration-300">
       <span className="text-gray-400">{icon}</span>
       <input
         {...props}

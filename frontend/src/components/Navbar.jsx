@@ -57,19 +57,22 @@ const Navbar = () => {
   };
 
   const linkBase =
-    "relative flex items-center gap-2 px-3 py-2 text-sm font-medium transition-colors";
+    "relative flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 hover:scale-105";
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-[#0b0f1a] border-b border-white/10">
+    <nav className="fixed top-0 left-0 w-full z-50 nav-glass border-b border-white/10 animate-fade-in-down">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex h-16 items-center justify-between">
           {/* Brand */}
           <div
             onClick={() => navigate("/")}
-            className="cursor-pointer select-none"
+            className="cursor-pointer select-none group"
           >
-            <span className="text-lg font-semibold tracking-tight text-white">
-              Invoice<span className="text-cyan-400">Master</span>
+            <span className="text-lg font-semibold tracking-tight text-white transition-all duration-300 group-hover:tracking-wide">
+              Invoice
+              <span className="text-cyan-400 group-hover:text-cyan-300 transition-colors">
+                Master
+              </span>
             </span>
           </div>
 
@@ -123,7 +126,7 @@ const Navbar = () => {
 
                 <button
                   onClick={handleLogout}
-                  className="ml-2 flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-400 hover:text-red-400 transition"
+                  className="ml-2 flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-400 hover:text-red-400 transition-all duration-200 btn-press"
                 >
                   <RiLogoutCircleRLine className="w-5 h-5" />
                   Logout
@@ -133,7 +136,7 @@ const Navbar = () => {
               /* WHEN NOT LOGGED IN */
               <button
                 onClick={() => navigate("/login")}
-                className="ml-2 rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-black hover:bg-cyan-400 transition"
+                className="ml-2 rounded-lg bg-cyan-500 px-4 py-2 text-sm font-semibold text-black hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 btn-press"
               >
                 Get Started
               </button>
@@ -155,7 +158,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden mt-2 rounded-xl bg-[#0f1424] border border-white/10 p-3 space-y-1">
+          <div className="md:hidden mt-2 rounded-xl bg-[#0f1424]/95 backdrop-blur-lg border border-white/10 p-3 space-y-1 animate-fade-in-down">
             {navItems.map((item) => (
               <NavLink
                 key={item.name}

@@ -40,7 +40,7 @@ const AllBill = () => {
     <div className="min-h-screen bg-[#0b0f1a] pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 animate-fade-in-up">
           <div>
             <h1 className="text-2xl font-semibold text-white">Bills</h1>
             <p className="text-sm text-gray-400">
@@ -54,18 +54,18 @@ const AllBill = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by customer name"
-              className="w-full rounded-lg bg-[#0f1424] border border-white/10 pl-9 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400"
+              className="w-full rounded-lg bg-[#0f1424] border border-white/10 pl-9 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_0_3px_rgba(6,182,212,0.1)] transition-all duration-300"
             />
           </div>
         </div>
 
         {/* Bills */}
-        <div className="space-y-4">
+        <div className="space-y-4 stagger-children">
           {filteredBills.length > 0 ? (
             filteredBills.map((bill) => (
               <div
                 key={bill._id}
-                className="rounded-xl border border-white/10 bg-[#0f1424] overflow-hidden"
+                className="rounded-xl border border-white/10 bg-[#0f1424] overflow-hidden hover-lift"
               >
                 {/* Summary Row */}
                 <div
@@ -91,7 +91,7 @@ const AllBill = () => {
                         e.stopPropagation();
                         downloadBillPDF(bill._id);
                       }}
-                      className="p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition"
+                      className="p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-200 hover:scale-110"
                     >
                       <FiDownload />
                     </button>
@@ -106,7 +106,7 @@ const AllBill = () => {
 
                 {/* Expanded Details */}
                 {expandedBill === bill._id && (
-                  <div className="border-t border-white/10 bg-[#0b0f1a] px-6 py-6">
+                  <div className="border-t border-white/10 bg-[#0b0f1a] px-6 py-6 animate-fade-in">
                     {/* Invoice Meta */}
                     <div className="flex flex-wrap justify-between gap-4 mb-6">
                       <div>

@@ -109,14 +109,18 @@ const Login = () => {
   };
 
   const inputBase =
-    "w-full rounded-lg bg-[#0b0f1a] border border-white/10 px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400";
+    "w-full rounded-lg bg-[#0b0f1a] border border-white/10 px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_0_3px_rgba(6,182,212,0.1)] transition-all duration-300";
 
   return (
-    <div className="min-h-screen bg-[#0b0f1a] flex items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-xl border border-white/10 bg-[#0f1424] p-8">
+    <div className="min-h-screen bg-[#0b0f1a] flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0f1424]/80 backdrop-blur-xl p-8 animate-scale-in relative z-10 gradient-border">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-xl font-semibold text-white tracking-tight">
+          <h1 className="text-2xl font-bold text-white tracking-tight">
             {state === "Sign Up" ? "Create your account" : "Welcome back"}
           </h1>
           <p className="mt-2 text-sm text-gray-400">
@@ -126,7 +130,14 @@ const Login = () => {
           </p>
 
           {state === "Sign Up" && (
-            <p className="mt-3 text-xs text-gray-500">Step {signUpStep} of 2</p>
+            <div className="mt-4 flex items-center justify-center gap-3">
+              <div
+                className={`h-1.5 w-10 rounded-full transition-all duration-500 ${signUpStep >= 1 ? "bg-cyan-400" : "bg-white/10"}`}
+              />
+              <div
+                className={`h-1.5 w-10 rounded-full transition-all duration-500 ${signUpStep >= 2 ? "bg-cyan-400" : "bg-white/10"}`}
+              />
+            </div>
           )}
         </div>
 
@@ -220,7 +231,7 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => setSignUpStep(1)}
-                className="w-full rounded-lg border border-white/10 py-3 text-sm text-gray-300 hover:text-white transition"
+                className="w-full rounded-lg border border-white/10 py-3 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-200 btn-press"
               >
                 Back
               </button>
@@ -229,7 +240,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-cyan-500 py-3 text-sm font-semibold text-black hover:bg-cyan-400 transition disabled:opacity-60"
+              className="w-full rounded-lg bg-cyan-500 py-3 text-sm font-semibold text-black hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 disabled:opacity-60 btn-press"
             >
               {loading
                 ? "Processing..."

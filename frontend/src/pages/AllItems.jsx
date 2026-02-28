@@ -73,7 +73,7 @@ const AllItems = () => {
     <div className="min-h-screen bg-[#0b0f1a] pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 animate-fade-in-up">
           <div>
             <h1 className="text-2xl font-semibold text-white tracking-tight">
               Inventory
@@ -91,7 +91,7 @@ const AllItems = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search items"
-                className="w-56 rounded-lg bg-[#0f1424] border border-white/10 pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
+                className="w-56 rounded-lg bg-[#0f1424] border border-white/10 pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_0_3px_rgba(6,182,212,0.1)] transition-all duration-300"
               />
             </div>
 
@@ -99,14 +99,14 @@ const AllItems = () => {
             <div className="relative">
               <button
                 onClick={() => setShowCategoryFilter((v) => !v)}
-                className="flex items-center gap-2 rounded-lg border border-white/10 bg-[#0f1424] px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:border-cyan-400 transition"
+                className="flex items-center gap-2 rounded-lg border border-white/10 bg-[#0f1424] px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:border-cyan-400 transition-all duration-200"
               >
                 {selectedCategory || "Category"}
                 <FiChevronDown />
               </button>
 
               {showCategoryFilter && (
-                <div className="absolute right-0 mt-2 w-48 rounded-lg border border-white/10 bg-[#0f1424] shadow-lg z-10">
+                <div className="absolute right-0 mt-2 w-48 rounded-lg border border-white/10 bg-[#0f1424] shadow-lg z-10 animate-fade-in-down">
                   {categories?.length ? (
                     categories.map((cat) => (
                       <button
@@ -133,7 +133,7 @@ const AllItems = () => {
             {/* Add Item */}
             <button
               onClick={() => navigate("/add-items")}
-              className="flex items-center gap-2 rounded-lg bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-black hover:bg-cyan-400 transition"
+              className="flex items-center gap-2 rounded-lg bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-black hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 btn-press"
             >
               <FiPlus />
               Add Item
@@ -142,7 +142,10 @@ const AllItems = () => {
         </div>
 
         {/* Table */}
-        <div className="overflow-hidden rounded-xl border border-white/10 bg-[#0f1424]">
+        <div
+          className="overflow-hidden rounded-xl border border-white/10 bg-[#0f1424] animate-fade-in-up"
+          style={{ animationDelay: "0.1s" }}
+        >
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left min-w-[600px]">
               <thead className="bg-[#0b0f1a] text-gray-400">
@@ -160,7 +163,7 @@ const AllItems = () => {
                   filterItems.map((item) => (
                     <tr
                       key={item._id}
-                      className="border-t border-white/5 hover:bg-white/5 transition"
+                      className="border-t border-white/5 table-row-hover"
                     >
                       <td className="px-5 py-4 text-white">{item.name}</td>
                       <td className="px-5 py-4 text-gray-400">
@@ -176,7 +179,7 @@ const AllItems = () => {
                       <td className="px-5 py-4 text-right">
                         <button
                           onClick={() => removeItem(item._id)}
-                          className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-red-400 hover:bg-white/10 transition"
+                          className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-red-400 hover:bg-white/10 transition-all duration-200 hover:scale-110"
                           title="Delete item"
                         >
                           <FiTrash2 />

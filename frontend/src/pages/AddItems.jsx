@@ -127,7 +127,7 @@ const AddItems = () => {
     <div className="min-h-screen bg-[#0b0f1a] pt-24 pb-16">
       <div className="max-w-3xl mx-auto px-6">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 animate-fade-in-up">
           <h1 className="text-2xl font-semibold text-white tracking-tight">
             Add Item
           </h1>
@@ -137,7 +137,10 @@ const AddItems = () => {
         </div>
 
         {/* Card */}
-        <div className="rounded-xl border border-white/10 bg-[#0f1424] p-8">
+        <div
+          className="rounded-xl border border-white/10 bg-[#0f1424] p-8 animate-fade-in-up"
+          style={{ animationDelay: "0.1s" }}
+        >
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Basic Info */}
             <div className="space-y-6">
@@ -293,7 +296,7 @@ const AddItems = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-2 rounded-lg bg-cyan-500 py-3 text-sm font-semibold text-black hover:bg-cyan-400 transition disabled:opacity-60"
+                className="w-full flex items-center justify-center gap-2 rounded-lg bg-cyan-500 py-3 text-sm font-semibold text-black hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 disabled:opacity-60 btn-press"
               >
                 {isSubmitting ? (
                   <>
